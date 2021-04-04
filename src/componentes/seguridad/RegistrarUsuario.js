@@ -1,4 +1,4 @@
-import { Container, Grid, TextField, Typography,Avatar } from '@material-ui/core';
+import { Container, Grid, TextField, Typography,Avatar, Button } from '@material-ui/core';
 import React, { Component } from 'react';
 import LockOutLineIcon from '@material-ui/icons/LockOutlined';
 
@@ -16,6 +16,10 @@ const style={
     form:{
         width:"100%",
         marginTop:10
+    },
+    submit:{
+        marginTop:15,
+        marginBottom:20
     }
 }
 
@@ -28,12 +32,28 @@ class RegistrarUsuario extends Component {
                         <LockOutLineIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        REgistre su cuenta
+                        Registre su cuenta
                     </Typography>
                     <form style={style.form}>
                         <Grid container spacing={2}>
-                            <Grid item ms={6} xs={12}>
+                            <Grid item md={6} xs={12}>
                                 <TextField name="nombre" fullWidth label="Ingrese su nombre"/>
+                            </Grid>
+                            <Grid item md={6} xs={12}>
+                                <TextField name="apellido" fullWidth label="Ingrese su apellido"/>
+                            </Grid>
+                            <Grid item md={6} xs={12}>
+                                <TextField name="email" fullWidth label="Ingrese su email"/>
+                            </Grid>
+                            <Grid item md={6} xs={12}>
+                                <TextField type="password" name="password" fullWidth label="Ingrese su password"/>
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="center">
+                            <Grid item xs={12} md={6} >
+                                <Button type="submit" variant="contained" fullWidth size="large" color="primary" style= {style.submit} >
+                                    Registrar
+                                </Button>
                             </Grid>
                         </Grid>
                     </form>
