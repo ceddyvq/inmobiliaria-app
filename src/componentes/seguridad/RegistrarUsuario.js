@@ -67,33 +67,22 @@ class RegistrarUsuario extends Component {
     });
   };
 
-  registrarUsuario = (e) => {
+  registrarUsuario = e => {
     e.preventDefault();
-    console.log("imrimir cosigo de usuario de state", this.state.usuario);
+    console.log("imrimir objeto  usuario del state", this.state.usuario);
     const { usuario, firebase } = this.state;
 
     firebase.auth
       .createUserWithEmailAndPassword(usuario.email, usuario.password)
       .then((auth) => {
-        const usuarioDB={
-          usuarioid:auth.user.uid,
-          email:usuario.email,
-          nombre:usuario.nombre,
-          apellido:usuario.apellido
-        }
-        firebase.db
-          .collection("Users")
-          .add(usuarioDB)
-          .then((usuarioAfter) => {
-            console.log("esta insercion fue un exito", usuarioAfter);
-            this.setState({
-              usuario: usuarioInicial,
-            });
-          })
-          .catch((error) => {
-            console.log("error", error);
-          });
-      })
+        
+        firebase.db.collection('Users').doc(auth.user.uid)
+        .set({nombre:usuario.nombre,apellido:usuario.apellido,id:auth.user.uid})
+        .then(doc=>{
+          this.props.history.push("/auth/home")
+        })
+
+      },{merge:true})
       .catch(error =>{
         console.log(error);
       })
