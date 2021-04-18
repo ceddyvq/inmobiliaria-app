@@ -1,0 +1,75 @@
+export const iniciarSesion = (dispatch, firebase, email, password) => {
+  return new Promise((resolve, eject) => {
+    firebase.auth
+      .signInWithEmailandPassword(email, password)
+      .then((auth) => {
+        firebase.db
+          .collection("Users")
+          .doc(auth.user.uid)
+          .get()
+          .then((doc) => {
+            const usuarioDB = doc.data();
+            dispatch({
+              type: "INICIAR_SESION",
+              sesion: usuarioDB,
+              autenticado: true,
+            });
+            resolve();
+          });
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  });
+};
+
+export const creaUsuario = (dispatch, firebase, usuario) => {
+  return new Promise((resolve, eject) => {
+    firebase.auth.createUser;
+    signInWithEmailandPassword(usuario.email, usuario.password)
+      .then((auth) => {
+        firebase.db
+          .collection("Users")
+          .doc(auth.user.uid)
+          .set(
+            {
+              id: auth.user.uid,
+              email: usuario.email,
+              nombre: usuario.nombre,
+              apellido: usuario.apellido,
+            },
+            { merge: true }
+          )
+          .then((doc) => {
+            usuario.id = auth.user.uid;
+            dispatch({
+              type: "INICIAR_SESION",
+              sesion: usuario,
+              autenticado: true,
+            });
+          });
+      })
+      .cath((error) => {
+        console.log("error", error);
+      });
+  });
+};
+export const salirSesion = (dispatch, firebase) => {
+  return new Promise((resolve, eject) => {
+    firebase.auth.signOut().then((salir) => {
+      dispatch({
+        type: "SALIR_SESION",
+        nuevoUsuario: {
+          nombre: "",
+          apellido: "",
+          email: "",
+          foto: "",
+          id: "",
+          telefono: "",
+        },
+        autenticado: false,
+      });
+      resolve();
+    });
+  });
+};
