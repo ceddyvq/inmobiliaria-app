@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import LockOutlineIcon from "@material-ui/icons/LockOutlined";
 import {compose} from 'recompose';
 import {consumerFirebase} from '../../server';
-
+import {iniciarSesion} from '../..sesion/actions/sesionAction';
+import { StateContext } from '../../sesion/store';
 const style={
     paper:{
         marginTop:9,
@@ -22,6 +23,7 @@ const style={
 }
 
 class Login extends Component {
+    static contextType=StateContext();
     state={
         firebase:null,
         usuario:{
@@ -47,19 +49,14 @@ class Login extends Component {
         })
     }
 
-    login=e=>{
+    login=async e=>{
         e.preventDefault();
+        const [{sesion},dispatch]=this.context;
+        const {firebase,usuario}=this.state;
+        const {email,password}=usuario;
+        let callback= await iniciarSesion(dispatch,firebase,email,password)
 
 
-        const{firebase,usuario}=this.state;
-        firebase.auth
-        .signInWithEmailAndPassword(usuario.email,usuario.password)
-        .then(auth=>{
-            this.props.history.push('/')
-        })
-        .catch(error =>{
-            console.log(error);
-        })
     }
     render() {
         return (
