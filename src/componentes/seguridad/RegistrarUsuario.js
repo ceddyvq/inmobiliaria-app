@@ -10,6 +10,9 @@ import React, { Component } from "react";
 import LockOutLineIcon from "@material-ui/icons/LockOutlined";
 import { compose } from "recompose";
 import { consumerFirebase } from "../../server";
+import {crearUsuario} from '../../sesion/actions/sesionAction';
+import {openMensajePantalla} from '../../sesion/actions/snackbarAction';
+import {StateContext} from '../../sesion/store';
 
 const style = {
   paper: {
@@ -40,6 +43,7 @@ const usuarioInicial = {
 };
 
 class RegistrarUsuario extends Component {
+  static contextType=StateContext;
   state = {
     firebase: null,
     usuario: {
@@ -67,25 +71,19 @@ class RegistrarUsuario extends Component {
     });
   };
 
-  registrarUsuario = e => {
+  registrarUsuario = async e => {
     e.preventDefault();
-    console.log("imrimir objeto  usuario del state", this.state.usuario);
-    const { usuario, firebase } = this.state;
-
-    firebase.auth
-      .createUserWithEmailAndPassword(usuario.email, usuario.password)
-      .then((auth) => {
-        
-        firebase.db.collection('Users').doc(auth.user.uid)
-        .set({nombre:usuario.nombre,apellido:usuario.apellido,id:auth.user.uid})
-        .then(doc=>{
-          this.props.history.push("/auth/home")
-        })
-
-      },{merge:true})
-      .catch(error =>{
-        console.log(error);
+    const [{sesion},dispatch]=this.context;
+    const {firebase, usuario} =this.state;
+    let callback = await crearUsuario(dispatch,firebase,usuario);
+    if(callback.status){
+      this.props.history.push("/")
+    }else{
+      openMensajePantalla(dispatch,{
+        open:true,
+        mensaje:callback.mensaje.message
       })
+    }
   };
 
   render() {

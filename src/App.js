@@ -30,14 +30,14 @@ function App(props){
   return autenticacionIniciada !== false ?(
     <React.Fragment>
       <Snackbar anchorOrigin={{vertical:"bottom" ,horizontal:"center"}}
-      open={openSnackbar ? openSnackbarReducer.open:false}
+      open={openSnackbar ? openSnackbar.open:false}
       autoHideDuration={3000}
       ContentProps={{
         "aria-describedby":"message-id"
       }}
       message={
         <span id="message-id">
-          {openSnackbar ? openSnackbar.message:""}
+          {openSnackbar ? openSnackbar.mensaje:""}
         </span>
       }
       onClose={()=>

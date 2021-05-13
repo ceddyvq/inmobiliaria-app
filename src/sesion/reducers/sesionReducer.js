@@ -20,13 +20,13 @@ const sesionReducer=(state,action)=>{
         case "CAMBIAR_SESION":
             return{
                 ...state,
-                usuario:action.nuevousuario,
+                usuario:action.nuevoUsuario,
                 autenticado:action.autenticado
             };
         case "SALIR_SESION":
             return{
                 ...state,
-                usuario:action.nuevousuario,
+                usuario:action.nuevoUsuario,
                 autenticado:action.autenticado
             };
         default:

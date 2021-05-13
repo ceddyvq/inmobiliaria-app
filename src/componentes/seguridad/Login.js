@@ -3,8 +3,10 @@ import React, { Component } from 'react';
 import LockOutlineIcon from "@material-ui/icons/LockOutlined";
 import {compose} from 'recompose';
 import {consumerFirebase} from '../../server';
-import {iniciarSesion} from '../..sesion/actions/sesionAction';
+import {iniciarSesion} from '../../sesion/actions/sesionAction';
+import {openMensajePantalla} from '../../sesion/actions/snackbarAction';
 import { StateContext } from '../../sesion/store';
+
 const style={
     paper:{
         marginTop:9,
@@ -23,7 +25,7 @@ const style={
 }
 
 class Login extends Component {
-    static contextType=StateContext();
+    static contextType = StateContext;
     state={
         firebase:null,
         usuario:{
@@ -54,7 +56,15 @@ class Login extends Component {
         const [{sesion},dispatch]=this.context;
         const {firebase,usuario}=this.state;
         const {email,password}=usuario;
-        let callback= await iniciarSesion(dispatch,firebase,email,password)
+        let callback= await iniciarSesion(dispatch,firebase,email,password);
+        if(callback.status){
+            this.props.history.push("/");
+        }else{
+            openMensajePantalla(dispatch,{
+                open:true,
+                mensaje:callback.mensaje.message
+            })
+        }
 
 
     }
